@@ -1,6 +1,8 @@
 import { computed, unref } from 'vue'
 import { useGlobalConfig } from '../use-global-config'
 
+// 重要改变
+// - 这里把 element2 中的 theme-chalk 整个换成了函数的形式，然后直接注入到标签上
 export const defaultNamespace = 'el'
 const statePrefix = 'is-'
 
@@ -27,12 +29,14 @@ const _bem = (
 export const useNamespace = (block: string) => {
   const globalConfig = useGlobalConfig('namespace')
   const namespace = computed(() => globalConfig.value || defaultNamespace)
+  // b e m
   const b = (blockSuffix = '') =>
     _bem(unref(namespace), block, blockSuffix, '', '')
   const e = (element?: string) =>
     element ? _bem(unref(namespace), block, '', element, '') : ''
   const m = (modifier?: string) =>
     modifier ? _bem(unref(namespace), block, '', '', modifier) : ''
+
   const be = (blockSuffix?: string, element?: string) =>
     blockSuffix && element
       ? _bem(unref(namespace), block, blockSuffix, element, '')
