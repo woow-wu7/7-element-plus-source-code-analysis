@@ -11,6 +11,12 @@ import {
 import { definePropType } from './props'
 import type { Component } from 'vue'
 
+// PropType
+// import type { PropType } from 'vue'
+
+// definePropType
+// export const definePropType = <T>(val: any): PropType<T> => val
+
 export const iconPropType = definePropType<string | Component>([
   String,
   Object,

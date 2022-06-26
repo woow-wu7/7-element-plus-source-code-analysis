@@ -59,7 +59,7 @@ const breadcrumbContext = inject(breadcrumbKey, undefined)!
 const ns = useNamespace('breadcrumb')
 
 // toRefs
-// - 将 inject 转成响应式
+// - 将 inject 转成响应式，因为 provide/inject不保证响应式
 const { separator, separatorIcon } = toRefs(breadcrumbContext)
 
 // instance.appContext.config.globalProperties

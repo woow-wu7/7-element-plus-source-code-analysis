@@ -30,7 +30,7 @@ const props = defineProps(breadcrumbProps)
 
 const ns = useNamespace('breadcrumb') // 获取命名空间 el
 
-const breadcrumb = ref<HTMLDivElement>() // ref
+const breadcrumb = ref<HTMLDivElement>() // ref，注意这里的 ( 变量名 ) 需要和template模版中的 ( ref绑定的值 ) 一样
 
 // 2
 // provide
@@ -60,10 +60,22 @@ provide(breadcrumbKey, props)
 // - 具体：typescript -> 非空断言 -> x! 将从 x 值域中排除 null 和 undefined
 onMounted(() => {
   // items
-  // 查找所有 el-breadcrumb-item
+  // - 查找所有 el-breadcrumb-item
+
+  // element.querySelectorAll()
+  // - 思考：这里提供了一种获取所有子元素的方法，即 父元素.querySelectorAll()
+
   const items = breadcrumb.value!.querySelectorAll(`.${ns.e('item')}`)
 
-  // 最后一个 el-breadcrumb-item
+  // 扩展
+  // - document.querySelectorAll()
+  // - element.querySelectorAll()
+  // - 在 document 和 element 上都部署了 querySelectorAll，所以这里是 el-breadcrumb.querySelectorAll()
+
+  // 标记
+  // - 标记最后一个孩子节点
+  // - 作用：标记后，比如可以让最后一个孩子不出现分隔符，设置最后一个元素的颜色，不可点击等
+  // - 扩展：除了在父组件上标记，还可以在子组件上通过 :last-child 来标记
   if (items.length) {
     items[items.length - 1].setAttribute('aria-current', 'page')
   }
