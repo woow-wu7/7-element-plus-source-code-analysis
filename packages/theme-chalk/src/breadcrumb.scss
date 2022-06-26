@@ -12,6 +12,32 @@
     font-weight: bold;
     color: getCssVar('text-color', 'placeholder');
 
+    // 1
+    // joinVarName
+    // join var name
+    // joinVarName(('button', 'text-color')) => '--el-button-text-color'
+
+    // @function joinVarName($list) {
+    //   $name: '--' + config.$namespace;
+    //   @each $item in $list {
+    //     @if $item != '' {
+    //       $name: $name + '-' + $item;
+    //     }
+    //   }
+    //   @return $name;
+    // }
+
+
+
+    // 2
+    // getCssVar
+    // getCssVar('button', 'text-color') => var(--el-button-text-color)
+
+    // @function getCssVar($args...) {
+    //   @return var(#{joinVarName($args)});
+    // }
+
+
     &.#{$namespace}-icon {
       margin: 0 6px;
       font-weight: normal;
