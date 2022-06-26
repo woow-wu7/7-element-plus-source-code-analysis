@@ -62,15 +62,23 @@ onMounted(() => {
   // items
   // - 查找所有 el-breadcrumb-item
 
-  // element.querySelectorAll()
-  // - 思考：这里提供了一种获取所有子元素的方法，即 父元素.querySelectorAll()
+
 
   const items = breadcrumb.value!.querySelectorAll(`.${ns.e('item')}`)
+
+  // 思考
+  // - 这里提供了一种获取所有子元素的方法，即 父元素.querySelectorAll(相同子元素的css选择器)
 
   // 扩展
   // - document.querySelectorAll()
   // - element.querySelectorAll()
   // - 在 document 和 element 上都部署了 querySelectorAll，所以这里是 el-breadcrumb.querySelectorAll()
+
+  // 扩展
+  // 问题：获取所有子元素的方法有哪些？
+  // - 1. element.children ----------------------- 当前元素节点的所有子元素，HTMLCollection
+  // - 2. Node.childNodes ------------------------ 当前节点的所有子节点，NodeList
+  // - 3. element.querySelectorAll(css选择器)
 
   // 标记
   // - 标记最后一个孩子节点
