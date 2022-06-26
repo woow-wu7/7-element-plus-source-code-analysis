@@ -3,6 +3,9 @@ import type { ExtractPropTypes } from 'vue'
 import type { RouteLocationRaw } from 'vue-router'
 import type BreadcrumbItem from './breadcrumb-item.vue'
 
+// props
+// - to
+// - replace
 export const breadcrumbItemProps = buildProps({
   to: {
     type: definePropType<RouteLocationRaw>([String, Object]),
@@ -13,6 +16,7 @@ export const breadcrumbItemProps = buildProps({
     default: false,
   },
 } as const)
-export type BreadcrumbItemProps = ExtractPropTypes<typeof breadcrumbItemProps>
 
+// type
+export type BreadcrumbItemProps = ExtractPropTypes<typeof breadcrumbItemProps>
 export type BreadcrumbItemInstance = InstanceType<typeof BreadcrumbItem>
