@@ -28,9 +28,9 @@ defineOptions({
 
 // 2
 // dividerProps
-// - direction: 设置分割线方向
-// - border-style: 设置分隔符样式
-// - content-position: 自定义分隔线内容的位置
+// - direction: 设置分割线方向 ---------------- string -> horizontal / vertical
+// - border-style: 设置分隔符样式 ------------- string
+// - content-position: 自定义分隔线内容的位置 -- string
 
 // export const dividerProps = buildProps({
 //   direction: {

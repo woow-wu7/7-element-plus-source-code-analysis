@@ -67,21 +67,30 @@ import type { SFCInstallWithContext, SFCWithInstall } from './typescript'
 // withInstall
 // - 从命名上就知道是注册组件，的同时返回组件
 export const withInstall = <T, E extends Record<string, any>>(
+  // 1
+  // E extends Record<string, any>
+  // 表示 ( 对象 E ) 的 ( key是string类型 )，( value是any类型 )
   main: T,
   extra?: E
 ) => {
+  // 2
+  // () 和 []
+  // - 在用js结尾不加分号的写法时，小括号() 或 中括号[] 开头的前一条语句，需要加上分号
   ;(main as SFCWithInstall<T>).install = (app): void => {
     for (const comp of [main, ...Object.values(extra ?? {})]) {
       app.component(comp.name, comp) // ----- 注册组件
     }
   }
 
+  // 当一个组件中，有多个组件导出时，将额外导出的组件绑定在默认导出的组件上
   if (extra) {
     for (const [key, comp] of Object.entries(extra)) {
-      ;(main as any)[key] = comp // --------- 当一个组件中，有多个组件导出时，将额外导出的组件绑定在默认导出的组件上
+      ;(main as any)[key] = comp
     }
   }
-  return main as SFCWithInstall<T> & E // --- 返回组件
+
+  // 返回组件
+  return main as SFCWithInstall<T> & E
 }
 
 
