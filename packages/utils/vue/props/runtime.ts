@@ -98,6 +98,8 @@ export const buildProp = <
   return epProp
 }
 
+
+// buildProps
 export const buildProps = <
   Props extends Record<
     string,
@@ -115,6 +117,8 @@ export const buildProps = <
   >
 } =>
   fromPairs(
+    // fromPairs
+    // - 将数组 [[key1, value1], [key2, value2]] 转成对象 ----->{key1: value1, key2: value2}
     Object.entries(props).map(([key, option]) => [
       key,
       buildProp(option as any, key),

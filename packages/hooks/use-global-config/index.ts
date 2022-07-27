@@ -19,12 +19,16 @@ export function useGlobalConfig<
   defaultValue?: D
 ): Ref<Exclude<ConfigProviderContext[K], undefined> | D>
 export function useGlobalConfig(): Ref<ConfigProviderContext>
+
+// useGlobalConfig
 export function useGlobalConfig(
   key?: keyof ConfigProviderContext,
   defaultValue = undefined
 ) {
   const config = getCurrentInstance()
     ? inject(configProviderContextKey, globalConfig)
+    // 1. configProviderContextKey = Symbol()
+    // 2. const globalConfig = ref()
     : globalConfig
   if (key) {
     return computed(() => config.value?.[key] ?? defaultValue)

@@ -36,6 +36,7 @@ watch(
   () => props.active,
   (newVal: number, oldVal: number) => {
     emit(CHANGE_EVENT, newVal, oldVal)
+    // emit('change', newVal, oldVal)
   }
 )
 </script>

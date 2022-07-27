@@ -6,34 +6,42 @@ import { useGlobalConfig } from '../use-global-config'
 export const defaultNamespace = 'el'
 const statePrefix = 'is-'
 
+// _bem
 const _bem = (
   namespace: string,
-  block: string,
-  blockSuffix: string,
-  element: string,
-  modifier: string
+  block: string, // B
+  blockSuffix: string, // B 后缀
+  element: string, // E
+  modifier: string // M
 ) => {
-  let cls = `${namespace}-${block}`
+  let cls = `${namespace}-${block}` // class
   if (blockSuffix) {
-    cls += `-${blockSuffix}`
+    cls += `-${blockSuffix}` // 后缀
   }
   if (element) {
-    cls += `__${element}`
+    cls += `__${element}` // E
   }
   if (modifier) {
-    cls += `--${modifier}`
+    cls += `--${modifier}` // M
   }
   return cls
 }
 
+// unref
+// - 是一个语法糖
+// - 相当于：val = isRef(val) ? val.value : val
+
+// useNamespace
 export const useNamespace = (block: string) => {
   const globalConfig = useGlobalConfig('namespace')
   const namespace = computed(() => globalConfig.value || defaultNamespace)
   // b e m
   const b = (blockSuffix = '') =>
-    _bem(unref(namespace), block, blockSuffix, '', '')
+    _bem(unref(namespace), block, blockSuffix, '', '') // 参数分别是：namespace block suffixBlock element modifier
+
   const e = (element?: string) =>
     element ? _bem(unref(namespace), block, '', element, '') : ''
+
   const m = (modifier?: string) =>
     modifier ? _bem(unref(namespace), block, '', '', modifier) : ''
 
@@ -53,6 +61,10 @@ export const useNamespace = (block: string) => {
     blockSuffix && element && modifier
       ? _bem(unref(namespace), block, blockSuffix, element, modifier)
       : ''
+
+
+  // is
+  // - 比如 ns.is(contentPosition) 是 ns.is('center') 时，结果就是 ( is-center )
   const is: {
     (name: string, state: boolean | undefined): string
     (name: string): string
@@ -70,6 +82,7 @@ export const useNamespace = (block: string) => {
     }
     return styles
   }
+  
   // with block
   const cssVarBlock = (object: Record<string, string>) => {
     const styles: Record<string, string> = {}
@@ -83,6 +96,8 @@ export const useNamespace = (block: string) => {
   const cssVarBlockName = (name: string) =>
     `--${namespace.value}-${block}-${name}`
 
+
+  // useNamespace 的返回值
   return {
     namespace,
     b,

@@ -100,7 +100,7 @@ const currentInstance = getCurrentInstance()
 
 onMounted(() => {
   watch(
-    [
+    [ // 监听父组件传入的 props 的状态变化
       () => parent.props.active,
       () => parent.props.processStatus,
       () => parent.props.finishStatus,
