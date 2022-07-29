@@ -82,7 +82,7 @@ export const useNamespace = (block: string) => {
     }
     return styles
   }
-  
+
   // with block
   const cssVarBlock = (object: Record<string, string>) => {
     const styles: Record<string, string> = {}

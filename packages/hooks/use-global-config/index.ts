@@ -20,7 +20,19 @@ export function useGlobalConfig<
 ): Ref<Exclude<ConfigProviderContext[K], undefined> | D>
 export function useGlobalConfig(): Ref<ConfigProviderContext>
 
+// -------------------------------------
+// 1
 // useGlobalConfig
+
+// 2
+// configProviderContextKey
+// export const configProviderContextKey: InjectionKey<
+//   Ref<ConfigProviderContext>
+// > = Symbol()
+
+// 3
+// const globalConfig = ref<ConfigProviderContext>()
+
 export function useGlobalConfig(
   key?: keyof ConfigProviderContext,
   defaultValue = undefined
@@ -30,12 +42,14 @@ export function useGlobalConfig(
     // 1. configProviderContextKey = Symbol()
     // 2. const globalConfig = ref()
     : globalConfig
+
   if (key) {
     return computed(() => config.value?.[key] ?? defaultValue)
   } else {
     return config
   }
 }
+
 
 export const provideGlobalConfig = (
   config: MaybeRef<ConfigProviderContext>,
@@ -66,6 +80,10 @@ export const provideGlobalConfig = (
   return context
 }
 
+// mergeConfig
+// 合并策略
+// - b中存在，使用 b
+// - b中不存在，使用 a
 const mergeConfig = (
   a: ConfigProviderContext,
   b: ConfigProviderContext

@@ -10,6 +10,30 @@
     width: 100%;
     margin: 24px 0;
     border-top: 1px getCssVar('border-color') getCssVar('border-style');
+
+    // 1
+    // getCssVar
+    // getCssVar('border-color')
+
+    // 1.1
+    // getCssVar('button', 'text-color') => var(--el-button-text-color)
+    // @function getCssVar($args...) {
+    //   @return var(#{joinVarName($args)});
+    // }
+
+    // 1.2
+    // join var name
+    // joinVarName(('button', 'text-color')) => '--el-button-text-color'
+    // @function joinVarName($list) {
+    //   $name: '--' + config.$namespace; // 1. 初始化时 $name = --el
+    //   @each $item in $list {
+    //     @if $item != '' {
+    //       $name: $name + '-' + $item; // 2. $name: --el-border-color
+    //     }
+    //   }
+    //   @return $name;
+    // }
+
   }
 
   @include m(vertical) {
@@ -46,3 +70,4 @@
     }
   }
 }
+

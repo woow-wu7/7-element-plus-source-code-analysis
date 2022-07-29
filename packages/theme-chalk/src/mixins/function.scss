@@ -1,5 +1,15 @@
 @use 'config';
 
+// 注意 @use 和 @import 的区别
+// - 链接：https://toutiao.io/posts/3a7enfa/preview
+// - config 中包含了一下变量
+// $namespace: 'el' !default;
+// $common-separator: '-' !default;
+// $element-separator: '__' !default;
+// $modifier-separator: '--' !default;
+// $state-prefix: 'is-' !default;
+
+
 // BEM support Func
 @function selectorToString($selector) {
   $selector: inspect($selector);
@@ -45,10 +55,13 @@
 // join var name
 // joinVarName(('button', 'text-color')) => '--el-button-text-color'
 @function joinVarName($list) {
-  $name: '--' + config.$namespace;
+  $name: '--' + config.$namespace; // 1. 初始化时 $name = --el
   @each $item in $list {
     @if $item != '' {
       $name: $name + '-' + $item;
+      // 2
+      // 比如  getCssVar('border-color')
+      // -  $name: --el-border-color
     }
   }
   @return $name;
@@ -58,6 +71,27 @@
 @function getCssVarName($args...) {
   @return joinVarName($args);
 }
+
+
+
+// 1
+// 可变参数
+// @function 和 @mixin 中的 ( 可变参数 )
+// ---
+// @mixin animate($name, $time, $mode, $delay) {
+//   transition: $name $time $mode $delay;
+// }
+// 等价于
+// @mixin animate($args...) {
+//   transition: $args;
+// }
+// ---
+// 使用
+// div {
+//   @include animate(all, 4s, linear, 0s);
+// }
+
+
 
 // getCssVar('button', 'text-color') => var(--el-button-text-color)
 @function getCssVar($args...) {

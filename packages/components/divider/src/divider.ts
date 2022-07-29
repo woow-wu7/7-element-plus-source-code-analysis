@@ -5,6 +5,12 @@ import type Divider from './divider.vue'
 export type BorderStyle = CSSStyleDeclaration['borderStyle']
 
 export const dividerProps = buildProps({
+  // 1
+  // direction: {
+  //   type: String as PropType<"horizontal" | "vertical">,
+  //   default: "horizontal",
+  // },
+  // direction 像上面这样写，利用 Prototype 也是可以的
   direction: {
     type: String,
     values: ['horizontal', 'vertical'],

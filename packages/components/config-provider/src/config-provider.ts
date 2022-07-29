@@ -50,6 +50,8 @@ export const configProviderProps = buildProps({
 } as const)
 export type ConfigProviderProps = ExtractPropTypes<typeof configProviderProps>
 
+// ConfigProvider
+// - 是一个组件
 const ConfigProvider = defineComponent({
   name: 'ElConfigProvider',
   props: configProviderProps,
