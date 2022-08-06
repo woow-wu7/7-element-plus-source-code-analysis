@@ -64,12 +64,19 @@ export const useNamespace = (block: string) => {
 
 
   // is
-  // - 比如 ns.is(contentPosition) 是 ns.is('center') 时，结果就是 ( is-center )
+  // - 只有一个参数:
+  //    - 比如 ns.is(contentPosition) 是 ns.is('center') 时，结果就是 ( is-center )
+  // - 有两个以上的参数:
+  //    - 比如 ns.is('vertical', isVertical)
+  //    - 第一个参数是 modifier ---> is-modifier
+  //    - 第二个参数是 boolean ----> state的取值
   const is: {
     (name: string, state: boolean | undefined): string
     (name: string): string
   } = (name: string, ...args: [boolean | undefined] | []) => {
+
     const state = args.length >= 1 ? args[0]! : true
+    // 当参数大于两个时，state取第二个参数是Boolean值，表示是否显示 is-modifier
     return name && state ? `${statePrefix}${name}` : ''
   }
 
