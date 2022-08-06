@@ -40,7 +40,7 @@ const props = defineProps(breadcrumbItemProps)
 // getCurrentInstance()!
 // - 作用：
 //  - 1. 获取当前组件实例
-//  - 2. ! 去除 undefined 和 null
+//  - 2. ! 表示非空断言，去除 undefined 和 null
 // - 使用：
 //  - getCurrentInstance 只能在 ( setup ) 或 ( 生命周期钩子 ) 中调用
 // - 官网
@@ -73,4 +73,20 @@ const onClick = () => {
   if (!props.to || !router) return
   props.replace ? router.replace(props.to) : router.push(props.to)
 }
+
+// ----
+// 内置组件
+// 1. 内置组件有哪些？
+//    - keep-alive transition transition-group teleport component
+// 2. 特点
+//    - tree-shake: 只有在被使用的时才会被引入
+
+// ----
+// component
+// - props
+//  - is: string | Component | VNode
+//  - is: is 的值是一个字符串，它既可以是 ( HTML标签名 ) 也可以是 ( 组件名 )。
+// - 用法
+//  - 渲染一个“元组件”为动态组件。依 is 的值，来决定哪个组件被渲染。
+//  - 在本组件中，通过 ICON名 来渲染 ICON组件
 </script>

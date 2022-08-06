@@ -95,7 +95,7 @@
 
 // getCssVar('button', 'text-color') => var(--el-button-text-color)
 @function getCssVar($args...) {
-  @return var(#{joinVarName($args)});
+  @return var(#{joinVarName($args)}); // 
 }
 
 // getCssVarWithDefault(('button', 'text-color'), red) => var(--el-button-text-color, red)

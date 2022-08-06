@@ -26,11 +26,28 @@ defineOptions({
 // - separator
 // - separator-icon
 //   - 在element2中是传入的 separator separator-class
+
+// export const breadcrumbProps = buildProps({
+//   separator: {
+//     type: String,
+//     default: '/',
+//   },
+//   separatorIcon: {
+//     type: iconPropType,
+//     default: '',
+//   },
+// } as const)
+
 const props = defineProps(breadcrumbProps)
 
-const ns = useNamespace('breadcrumb') // 获取命名空间 el
+const ns = useNamespace('breadcrumb')
 
-const breadcrumb = ref<HTMLDivElement>() // ref，注意这里的 ( 变量名 ) 需要和template模版中的 ( ref绑定的值 ) 一样
+
+const breadcrumb = ref<HTMLDivElement>()
+// ref
+// - 注意这里的 ( 变量名 ) 需要和template模版中的 ( ref绑定的值 ) 一样
+// - 这里是用来绑定DOM，即 breadcrumb 组件
+
 
 // 2
 // provide
@@ -56,15 +73,13 @@ provide(breadcrumbKey, props)
 
 // 4
 // 非空断言 !
-// - 作用：后缀表达式操作符 ! 可以用于断言操作对象是非 null 和非 undefined 类型
+// - 作用：后缀表达式操作符 ! 可以用于断言操作对象是 ( 非null 和 非undefined  )类型
 // - 具体：typescript -> 非空断言 -> x! 将从 x 值域中排除 null 和 undefined
 onMounted(() => {
-  // items
-  // - 查找所有 el-breadcrumb-item
-
-
 
   const items = breadcrumb.value!.querySelectorAll(`.${ns.e('item')}`)
+  // items
+  // - 查找所有 el-breadcrumb-item
 
   // 思考
   // - 这里提供了一种获取所有子元素的方法，即 父元素.querySelectorAll(相同子元素的css选择器)
