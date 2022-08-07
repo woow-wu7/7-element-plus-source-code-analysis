@@ -6,13 +6,13 @@ import type { SFCInstallWithContext, SFCWithInstall } from './typescript'
 
 // 1
 // 插件
-// - 类型：
+// - 类型:
 //  - object ----> 一个具有 ( install方法的对象 ) ---- 参数 install(app, options)
 //  - function --> 或者是一个 ( function ) ---------- 参数 function(app, options)
-// - 参数：
+// - 参数:
 //  - app -------> createApp 生成的 app 对象，app中包含了 ( component, provide, directive, mixin, config ) 等很多属性
 //  - options ---> 用户传入的选项
-// - 使用插件
+// - 使用插件:
 //  - const app = createApp(Root)
 //  - app.use(插件名称）
 
@@ -64,8 +64,14 @@ import type { SFCInstallWithContext, SFCWithInstall } from './typescript'
 // square.sideLength = 10;
 
 
+// 1
 // withInstall
 // - 从命名上就知道是注册组件，的同时返回组件
+// - effect: install component and return component
+// - advantage:
+//   - 1. 注册插件: 比如 breadcrumb 和 breadcrumb-item，利用 withInstall 在单独注册插件时，只需要 app.use(breadcrumb) 而不用再写 app.use(breadcrumb.item)
+//   - 2. 使用组件: 在 Breadcrumb.BreadcrumbItem 就可以调用到 BreadcrumbItem
+
 export const withInstall = <T, E extends Record<string, any>>(
   // 1
   // E extends Record<string, any>
@@ -73,9 +79,13 @@ export const withInstall = <T, E extends Record<string, any>>(
   main: T,
   extra?: E
 ) => {
+
   // 2
   // () 和 []
   // - 在用js结尾不加分号的写法时，小括号() 或 中括号[] 开头的前一条语句，需要加上分号
+
+  // 3
+  // SFC 是 vue 的语法规范
   ;(main as SFCWithInstall<T>).install = (app): void => {
     for (const comp of [main, ...Object.values(extra ?? {})]) {
       app.component(comp.name, comp) // ----- 注册组件
