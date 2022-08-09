@@ -42,6 +42,7 @@ export const useNamespace = (block: string) => {
   const e = (element?: string) =>
     element ? _bem(unref(namespace), block, '', element, '') : ''
 
+  // m 不包含 e
   const m = (modifier?: string) =>
     modifier ? _bem(unref(namespace), block, '', '', modifier) : ''
 
@@ -95,6 +96,7 @@ export const useNamespace = (block: string) => {
     const styles: Record<string, string> = {}
     for (const key in object) {
       styles[`--${namespace.value}-${block}-${key}`] = object[key]
+      // --dv-header-height
     }
     return styles
   }

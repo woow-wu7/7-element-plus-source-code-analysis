@@ -2,6 +2,7 @@ import { buildProps } from '@element-plus/utils'
 import type { ExtractPropTypes } from 'vue'
 import type Badge from './badge.vue'
 
+
 export const badgeProps = buildProps({
   value: {
     type: [String, Number],
