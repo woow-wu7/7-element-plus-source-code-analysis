@@ -34,7 +34,7 @@ const _bem = (
 // useNamespace
 export const useNamespace = (block: string) => {
   const globalConfig = useGlobalConfig('namespace')
-  const namespace = computed(() => globalConfig.value || defaultNamespace)
+  const namespace = computed(() => globalConfig.value || defaultNamespace) // 有时候是需要获取到namespace的，比如 backtop 组件
   // b e m
   const b = (blockSuffix = '') =>
     _bem(unref(namespace), block, blockSuffix, '', '') // 参数分别是：namespace block suffixBlock element modifier

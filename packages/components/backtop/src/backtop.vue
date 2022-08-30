@@ -29,11 +29,24 @@ defineOptions({
 })
 
 const props = defineProps(backtopProps)
+
+// export const backtopEmits = {
+//   click: (evt: MouseEvent) => evt instanceof MouseEvent,
+// }
 const emit = defineEmits(backtopEmits)
 
 const ns = useNamespace('backtop')
+
+// shallowRef
+// - https://cn.vuejs.org/api/reactivity-advanced.html#shallowref
+/*```
+const state = shallowRef({ count: 1 })
+state.value.count = 2 // ------ 不会触发更改
+state.value = { count: 2 } // - 会触发更改
+``` */
 const el = shallowRef<HTMLElement>()
 const container = shallowRef<Document | HTMLElement>()
+
 const visible = ref(false)
 
 const backTopStyle = computed(() => ({
@@ -60,7 +73,7 @@ const scrollToTop = () => {
   requestAnimationFrame(frameFunc)
 }
 const handleScroll = () => {
-  if (el.value) visible.value = el.value.scrollTop >= props.visibilityHeight
+  if (el.value) visible.value = el.value.scrollTop >= props.visibilityHeight // show hide
 }
 const handleClick = (event: MouseEvent) => {
   scrollToTop()
@@ -69,13 +82,16 @@ const handleClick = (event: MouseEvent) => {
 
 const handleScrollThrottled = useThrottleFn(handleScroll, 300)
 
-useEventListener(container, 'scroll', handleScrollThrottled)
+useEventListener(container, 'scroll', handleScrollThrottled) // 滚动事件
+
+
+// 主要是赋值 container 为 target，供 useEventListener 消费
 onMounted(() => {
   container.value = document
-  el.value = document.documentElement
+  el.value = document.documentElement // html
 
   if (props.target) {
-    el.value = document.querySelector<HTMLElement>(props.target) ?? undefined
+    el.value = document.querySelector<HTMLElement>(props.target) ?? undefined // target
     if (!el.value) {
       throwError(COMPONENT_NAME, `target is not existed: ${props.target}`)
     }
