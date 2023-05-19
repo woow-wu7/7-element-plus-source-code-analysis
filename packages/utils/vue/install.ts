@@ -10,7 +10,7 @@ import type { SFCInstallWithContext, SFCWithInstall } from './typescript'
 //  - object ----> 一个具有 ( install方法的对象 ) ---- 参数 install(app, options)
 //  - function --> 或者是一个 ( function ) ---------- 参数 function(app, options)
 // - 参数:
-//  - app -------> createApp 生成的 app 对象，app中包含了 ( component, provide, directive, mixin, config ) 等很多属性
+//  - app -------> createApp 生成的 app 对象，app中包含了 ( component,config,mixin,directive,provide,use,mount,unmount ) 等属性
 //  - options ---> 用户传入的选项
 // - 使用插件:
 //  - const app = createApp(Root)
@@ -63,6 +63,10 @@ import type { SFCInstallWithContext, SFCWithInstall } from './typescript'
 // square.color = "blue";
 // square.sideLength = 10;
 
+// 5
+// app.component()
+// 1.如果同时传递一个 ( 组件名字符串 )，( 及其定义 )，则 ( 注册一个全局组件 ) ---- 存
+// 2.如果 ( 只传递一个名字 )，则会返回用该名字注册的组件 (如果存在的话) ---------- 取
 
 // 1
 // withInstall
@@ -86,12 +90,17 @@ export const withInstall = <T, E extends Record<string, any>>(
 
   // 3
   // SFC 是 vue 的语法规范
+  // export type SFCWithInstall<T> = T & Plugin
   ;(main as SFCWithInstall<T>).install = (app): void => {
     for (const comp of [main, ...Object.values(extra ?? {})]) {
-      app.component(comp.name, comp) // ----- 注册组件
+      app.component(comp.name, comp) // ----- 注册全局组件
+      // app.component()
+      // 1.如果同时传递一个 ( 组件名字符串 )，( 及其定义 )，则 ( 注册一个全局组件 ) ---- 存
+      // 2.如果 ( 只传递一个名字 )，则会返回用该名字注册的组件 (如果存在的话) ---------- 取
     }
   }
 
+  // 注意: 上面的for只是注册 main 和 extra 中的所有组件
   // 当一个组件中，有多个组件导出时，将额外导出的组件绑定在默认导出的组件上
   if (extra) {
     for (const [key, comp] of Object.entries(extra)) {
@@ -103,14 +112,21 @@ export const withInstall = <T, E extends Record<string, any>>(
   return main as SFCWithInstall<T> & E
 }
 
-
-// - SFCInstallWithContext
-// export type SFCInstallWithContext<T> = SFCWithInstall<T> & {
-//   _context: AppContext | null
-// }
-
 // withInstallFunction
 // - 函数组件
+// - 作用
+//   - 1.当 组件 是 函数类型 时 ( 比如Message )，注册为Vue插件
+//   - 2.把 该组件 册能够被应用内所有组件实例访问到的 全局属性的对象 上，在任意 ( 组件模版 ) 和 ( 组件实例 ) 上都能访问到
+// - app.config.globalProperties
+//   - 一个用于注册能够被应用内所有组件实例访问到的全局属性的对象
+//   - 这是对 Vue 2 中 Vue.prototype 使用方式的一种替代，此写法在 Vue 3 已经不存在了
+//   - 如果全局属性与组件自己的属性冲突，组件自己的属性将具有更高的优先级
+//   - 示例
+//     - app.config.globalProperties.msg = 'hello'
+//     - 1.这使得 msg 在应用的任意组件模板上都可用
+//     - 2.并且也可以通过任意组件实例的 this 访问到 => this.msg
+// - app._context
+//     - app 上下文环境 VNode树挂在上面
 export const withInstallFunction = <T>(fn: T, name: string) => {
   ;(fn as SFCWithInstall<T>).install = (app: App) => {
     ;(fn as SFCInstallWithContext<T>)._context = app._context
@@ -119,6 +135,13 @@ export const withInstallFunction = <T>(fn: T, name: string) => {
 
   return fn as SFCInstallWithContext<T>
 }
+
+// - SFCInstallWithContext
+// export type SFCInstallWithContext<T> = SFCWithInstall<T> & {
+//   _context: AppContext | null
+// }
+
+// export type SFCWithInstall<T> = T & Plugin
 
 // withInstallDirective
 // - 指令
