@@ -33,9 +33,27 @@ const props = defineProps(emptyProps)
 const { t } = useLocale()
 const ns = useNamespace('empty')
 const emptyDescription = computed(
-  () => props.description || t('el.table.emptyText')
+  () => props.description || t('el.table.emptyText') // 18n
 )
 const imageStyle = computed<CSSProperties>(() => ({
   width: props.imageSize ? `${props.imageSize}px` : '',
 }))
+
+// 1
+// 禁止鼠标拖动图片 ondragstart="return false"
+// 禁止树鼠标右键保存图片 oncontextmenu="return false"
+// img v-if="image" :src="image" ondragstart="return false" />
+
+// 2
+// export const emptyProps = {
+//   image: {
+//     type: String,
+//     default: '',
+//   },
+//   imageSize: Number,
+//   description: {
+//     type: String,
+//     default: '',
+//   },
+// } as const
 </script>
