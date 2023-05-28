@@ -5,6 +5,7 @@
 - [x] divider
 - [x] container
 - [x] empty
+- [x] message
 
 
 

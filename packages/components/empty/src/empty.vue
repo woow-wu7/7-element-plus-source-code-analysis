@@ -6,6 +6,8 @@
         <img-empty />
       </slot>
     </div>
+
+    <!-- description 可以是属性出入的字符串，也可以是slot传入 -->
     <div :class="ns.e('description')">
       <slot v-if="$slots.description" name="description" />
       <p v-else>{{ emptyDescription }}</p>

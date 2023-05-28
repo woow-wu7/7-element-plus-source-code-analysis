@@ -60,13 +60,23 @@ const normalizeOptions = (params?: MessageParams) => {
   return normalized as MessageParamsNormalized
 }
 
+
+// element-ui message 源码分析
+// - https://github.com/woow-wu7/7-element-source-code-analysis/blob/main/packages/message/src/main.js
+
+// divine-ui message 源码
+// - https://github.com/woow-wu7/8-divine-plus/blob/main/packages/components/message/message.ts
+
+// closeMessage
+// - 1. 删除 instances 中对应的该 instance
+// - 2. vm.visible = false
 const closeMessage = (instance: MessageContext) => {
   const idx = instances.indexOf(instance)
   if (idx === -1) return
 
   instances.splice(idx, 1)
   const { handler } = instance
-  handler.close()
+  handler.close() // 即 vm.visible = false
 }
 
 const createMessage = (
@@ -84,11 +94,16 @@ const createMessage = (
     ...options,
     zIndex: options.zIndex ?? nextZIndex(),
     id,
+
+    // onClose
+    // - 对应 message.vue 中的  @before-leave="onClose"
     onClose: () => {
-      userOnClose?.()
+      userOnClose?.() // 用户传入的 onClose
       closeMessage(instance)
     },
 
+    // onDestroy
+    // - 对应 message.vue 中的  @after-leave="$emit('destroy')"
     // clean message element preventing mem leak
     onDestroy: () => {
       // since the element is destroy, then the VNode should be collected by GC as well
@@ -97,6 +112,9 @@ const createMessage = (
       render(null, container)
     },
   }
+
+
+  // createVNode
   const vnode = createVNode(
     MessageConstructor,
     props,
@@ -106,9 +124,10 @@ const createMessage = (
   )
   vnode.appContext = context || message._context
 
+  // render
   render(vnode, container)
   // instances will remove this item when close function gets called. So we do not need to worry about it.
-  appendTo.appendChild(container.firstElementChild!)
+  appendTo.appendChild(container.firstElementChild!) // div的第一个子元素，即不再需要div这个壳，div只是为了vnode提供挂载时的容器
 
   const vm = vnode.component!.proxy as MessageInstance
   const handler: MessageHandler = {
@@ -158,7 +177,7 @@ const message: MessageFn &
 
   const instance = createMessage(normalized, context)
 
-  instances.push(instance)
+  instances.push(instance) // 多个 instances 的 top 处理
   return instance.handler
 }
 
@@ -181,3 +200,40 @@ message.closeAll = closeAll
 message._context = null
 
 export default message as Message
+
+
+// # 需要用到的 vue3 api
+//     1
+//     createVNode
+//     createVNode(type, props, children, patchFlag, dynamicProps, isBlockNode)
+//     作用: 用来创建一个 VNode
+//     --
+//     签名
+//     declare function _createVNode(
+//       type: VNodeTypes | ClassComponent | typeof NULL_DYNAMIC_COMPONENT,
+//       props?: (Data & VNodeProps) | null,
+//       children?: unknown,
+//       patchFlag?: number,
+//       dynamicProps?: string[] | null,
+//       isBlockNode?: boolean
+//     ): VNode;
+
+
+//     2
+//     render
+//     render(vnode, container, isSVG)
+//     ---
+//     签名
+//     1.export declare const render: RootRenderFunction<Element | ShadowRoot>;
+//     2.export declare type RootRenderFunction<HostElement = RendererElement> = (
+//       vnode: VNode | null,
+//       container: HostElement,
+//       isSVG?: boolean
+//     ) => void;
+
+
+//     3
+//     vue2全局属性设置: Vue.prototype.xxx
+//     vue2全局属性获取: this.xxx
+//     vue3全局属性设置: createApp().config.globalProperties.xxx = xxx
+//     vue3全局属性获取: getCurrentInstance().appContext.globalProperties.xxx

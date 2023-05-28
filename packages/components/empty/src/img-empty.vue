@@ -13,6 +13,8 @@
         x2="61.1496914%"
         y2="100%"
       >
+        <!-- `var(${ns.cssVarBlockName('fill-color-1')})` -->
+        <!-- 相当于 var(dv-empty-fill-color-1) -->
         <stop
           :stop-color="`var(${ns.cssVarBlockName('fill-color-1')})`"
           offset="0%"
