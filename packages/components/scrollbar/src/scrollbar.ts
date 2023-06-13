@@ -34,7 +34,7 @@ export const scrollbarProps = buildProps({
     default: 'div',
   },
   always: Boolean,
-  minSize: {
+  minSize: { // 	滚动条最小尺寸
     type: Number,
     default: 20,
   },

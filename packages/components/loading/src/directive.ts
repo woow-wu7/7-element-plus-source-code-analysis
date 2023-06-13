@@ -20,8 +20,16 @@ const createInstance = (
   el: ElementLoading,
   binding: DirectiveBinding<LoadingBinding>
 ) => {
-  const vm = binding.instance
 
+  //  binding.instance 表示使用该指令的组件实例
+  const vm = binding.instance 
+
+  // binding.value 支持对象方式
+  // <div v-demo="{ color: 'white', text: 'hello!' }"></div>
+  // app.directive('demo', (el, binding) => {
+  //   console.log(binding.value.color) // => "white"
+  //   console.log(binding.value.text) // => "hello!"
+  // })
   const getBindingProp = <K extends keyof LoadingOptions>(
     key: K
   ): LoadingOptions[K] =>
@@ -54,6 +62,8 @@ const createInstance = (
     body: getBindingProp('body') ?? binding.modifiers.body,
     lock: getBindingProp('lock') ?? binding.modifiers.lock,
   }
+
+  // DOM上挂载属性
   el[INSTANCE_KEY] = {
     options,
     instance: Loading(options),

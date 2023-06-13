@@ -21,7 +21,8 @@ const moveY = ref(0)
 
 const handleScroll = (wrap: HTMLDivElement) => {
   if (wrap) {
-    const offsetHeight = wrap.offsetHeight - GAP
+    // export const GAP = 4 // top 2 + bottom 2 of bar instance
+    const offsetHeight = wrap.offsetHeight - GAP 
     const offsetWidth = wrap.offsetWidth - GAP
 
     moveY.value = ((wrap.scrollTop * 100) / offsetHeight) * props.ratioY

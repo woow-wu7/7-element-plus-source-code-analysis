@@ -28,7 +28,16 @@ import { thumbProps } from './thumb'
 const COMPONENT_NAME = 'Thumb'
 const props = defineProps(thumbProps)
 
+// provide(
+//   scrollbarContextKey,
+//   reactive({
+//     scrollbarElement: scrollbar$,
+//     wrapElement: wrap$,
+//   })
+// )
 const scrollbar = inject(scrollbarContextKey)
+
+
 const ns = useNamespace('scrollbar')
 
 if (!scrollbar) throwError(COMPONENT_NAME, 'can not inject scrollbar context')

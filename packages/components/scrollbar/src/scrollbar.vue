@@ -10,6 +10,7 @@
       :style="style"
       @scroll="handleScroll"
     >
+      <!-- 根据传入的tag，渲染不同的DOM -->
       <component
         :is="tag"
         ref="resize$"
@@ -19,6 +20,8 @@
         <slot />
       </component>
     </div>
+
+    <!-- 非原生滚动条 -->
     <template v-if="!native">
       <bar
         ref="barRef"
@@ -75,6 +78,7 @@ const ratioY = ref(1)
 const ratioX = ref(1)
 const SCOPE = 'ElScrollbar'
 
+// 处理 height maxHeight wrapStyle
 const style = computed<StyleValue>(() => {
   const style: CSSProperties = {}
   if (props.height) style.height = addUnit(props.height)
@@ -84,7 +88,7 @@ const style = computed<StyleValue>(() => {
 
 const handleScroll = () => {
   if (wrap$.value) {
-    barRef.value?.handleScroll(wrap$.value)
+    barRef.value?.handleScroll(wrap$.value) // bar组件中暴露出来的 handleScroll 方法
 
     emit('scroll', {
       scrollTop: wrap$.value.scrollTop,
@@ -121,16 +125,29 @@ const setScrollLeft = (value: number) => {
   wrap$.value!.scrollLeft = value
 }
 
+// update
+// - 1. onMounted onUpdated 执行 update
+// - 2. offsetHeight
+//        - clientWidth：对象内容的可视区的宽度，不包滚动条等边线，会随对象显示大小的变化而改变。 
+//        - offsetWidth：对象整体的实际宽度，包滚动条等边线，会随对象显示大小的变化而改变。
 const update = () => {
-  if (!wrap$.value) return
-  const offsetHeight = wrap$.value.offsetHeight - GAP
+  if (!wrap$.value) return // wrap 不存在
+  const offsetHeight = wrap$.value.offsetHeight - GAP // export const GAP = 4 // top 2 + bottom 2 of bar instance
   const offsetWidth = wrap$.value.offsetWidth - GAP
 
+  // 2**3=8 2**4=16
+  // minSize	滚动条最小尺寸 默认值 20
+  // 滚动条
+  // - 初始高度/宽度
+  // - 最终高度/宽度
   const originalHeight = offsetHeight ** 2 / wrap$.value.scrollHeight
   const originalWidth = offsetWidth ** 2 / wrap$.value.scrollWidth
   const height = Math.max(originalHeight, props.minSize)
   const width = Math.max(originalWidth, props.minSize)
 
+
+
+  // ratio = (容器的scrollHeight - 容器的offsetHeight)/(滚动条的scrollHeight-滚动条的offsetHeight)
   ratioY.value =
     originalHeight /
     (offsetHeight - originalHeight) /
@@ -145,7 +162,7 @@ const update = () => {
 }
 
 watch(
-  () => props.noresize,
+  () => props.noresize, // 不响应尺寸的变化；不响应容器尺寸变化，如果容器尺寸不会发生变化，最好设置它可以优化性能
   (noresize) => {
     if (noresize) {
       stopResizeObserver?.()
@@ -171,6 +188,7 @@ watch(
   }
 )
 
+// 透传给 thumb
 provide(
   scrollbarContextKey,
   reactive({
