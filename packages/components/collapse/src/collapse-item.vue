@@ -12,6 +12,9 @@
       :aria-controls="ns.b(`content-${id}`)"
       :aria-describedby="ns.b(`content-${id}`)"
     >
+      <!-- div 的 tabindex 和 focus/blur 的关系 -->
+      <!-- 支持键盘事件 回车键 -->
+      <!-- 1. header -->
       <div
         :id="ns.b(`head-${id}`)"
         :class="[
@@ -32,6 +35,8 @@
         </el-icon>
       </div>
     </div>
+
+    <!-- 2. content -->
     <el-collapse-transition>
       <div
         v-show="isActive"
@@ -63,15 +68,29 @@ defineOptions({
   name: 'ElCollapseItem',
 })
 
-const props = defineProps(collapseItemProps)
 
-const collapse = inject(collapseContextKey)
+// export const collapseItemProps = buildProps({
+//   title: {
+//     type: String,
+//     default: '',
+//   },
+//   name: {
+//     type: definePropType<CollapseActiveName>([String, Number]),
+//     default: () => generateId(),
+//   },
+//   disabled: Boolean,
+// } as const)
+const props = defineProps(collapseItemProps) // title name disabled
+
+const collapse = inject(collapseContextKey) // activeNames handleItemClick
+
 const ns = useNamespace('collapse')
 
 const focusing = ref(false)
 const isClick = ref(false)
 const id = ref(generateId())
 
+// 是否被点击，// 是否展开
 const isActive = computed(() =>
   collapse?.activeNames.value.includes(props.name)
 )
@@ -94,7 +113,7 @@ const handleHeaderClick = () => {
 }
 
 const handleEnterClick = () => {
-  collapse?.handleItemClick(props.name)
+  collapse?.handleItemClick(props.name) // 父组件传过来的 handleItemClick，参数是 name
 }
 
 defineExpose({

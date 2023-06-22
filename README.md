@@ -7,6 +7,7 @@
 - [x] empty
 - [x] message
 - [x] loading
+- [x] collapse
 
 
 
