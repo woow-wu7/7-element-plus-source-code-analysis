@@ -70,7 +70,7 @@
     >
       <slot :percentage="percentage">
         <span v-if="!status">{{ content }}</span>
-        <el-icon v-else><component :is="statusIcon" /></el-icon>
+        <component :is="statusIcon" />
       </slot>
     </div>
   </div>

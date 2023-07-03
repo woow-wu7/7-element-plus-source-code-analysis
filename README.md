@@ -8,6 +8,7 @@
 - [x] message
 - [x] loading
 - [x] collapse
+- [x] infinite-scroll 基本和 element-ui-2 一样 
 
 
 

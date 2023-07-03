@@ -56,10 +56,18 @@ const getScrollOptions = (
 ): ScrollOptions => {
   return Object.entries(attributes).reduce((acm, [name, option]) => {
     const { type, default: defaultValue } = option
-    const attrVal = el.getAttribute(`infinite-scroll-${name}`)
-    let value = instance[attrVal] ?? attrVal ?? defaultValue
+
+    // attrVal
+    // - 获取被绑元素的 各个属性
+    // - infinite-scroll-disabled 是否禁用
+    // - infinite-scroll-delay 节流时延，单位为ms
+    // - infinite-scroll-distance 触发加载的距离阈值，单位为px
+    // - infinite-scroll-immediate 是否立即执行加载方法，以防初始状态下内容无法撑满容器
+    const attrVal = el.getAttribute(`infinite-scroll-${name}`) 
+
+    let value = instance[attrVal] ?? attrVal ?? defaultValue // 没传入的属性，就使用默认值
     value = value === 'false' ? false : value
-    value = type(value)
+    value = type(value) // 格式化
     acm[name] = Number.isNaN(value) ? defaultValue : value
     return acm
   }, {} as ScrollOptions)
@@ -121,17 +129,21 @@ const InfiniteScroll: ObjectDirective<
   InfiniteScrollCallback
 > = {
   async mounted(el, binding) {
+    // instance 被绑组件实例
+    // value 指令的值
     const { instance, value: cb } = binding
 
+    // cb 必须是函数
     if (!isFunction(cb)) {
       throwError(SCOPE, "'v-infinite-scroll' binding value must be a function")
     }
 
     // ensure parentNode mounted
+    // 确保 父组件 存在
     await nextTick()
 
     const { delay, immediate } = getScrollOptions(el, instance)
-    const container = getScrollContainer(el, true)
+    const container = getScrollContainer(el, true) // 获取具有滚动条的元素，el 或者 距离最近的具有滚动条的祖先元素
     const containerEl =
       container === window
         ? document.documentElement
@@ -164,8 +176,8 @@ const InfiniteScroll: ObjectDirective<
   unmounted(el) {
     const { container, onScroll } = el[SCOPE]
 
-    container?.removeEventListener('scroll', onScroll)
-    destroyObserver(el)
+    container?.removeEventListener('scroll', onScroll) // 清除 scroll 事件
+    destroyObserver(el) // 停止观察
   },
   async updated(el) {
     if (!el[SCOPE]) {
