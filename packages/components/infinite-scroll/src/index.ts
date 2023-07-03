@@ -142,7 +142,7 @@ const InfiniteScroll: ObjectDirective<
     // 确保 父组件 存在
     await nextTick()
 
-    const { delay, immediate } = getScrollOptions(el, instance)
+    const { delay, immediate } = getScrollOptions(el, instance) // delay 和 immediate 属性一般不会变化，所以可以在 mounted 时获取
     const container = getScrollContainer(el, true) // 获取具有滚动条的元素，el 或者 距离最近的具有滚动条的祖先元素
     const containerEl =
       container === window
